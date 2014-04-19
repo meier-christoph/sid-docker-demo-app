@@ -10,15 +10,17 @@ RUN add-apt-repository ppa:chris-lea/node.js
 RUN apt-get update
 RUN apt-get install -y nodejs
 
-# Add sample application
-ADD app.js /app/express/app.js
-ADD package.json /app/express/package.json
-
 # Set working directory for execution
 WORKDIR /app/express
 
+# Add app config
+ADD package.json /app/express/package.json
+
 # Install app dependencies (express)
 RUN npm install	
+
+# Add app files
+ADD app.js /app/express/app.js
 
 # Expose port to host
 EXPOSE 8888
