@@ -1,5 +1,5 @@
 {
-  "name": "sid-docker-demo",
+  "name": "sid-docker-demo-app",
   "description": "sid docker demo app",
   "version": "0.0.1",
   "private": true,
