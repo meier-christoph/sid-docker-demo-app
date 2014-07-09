@@ -3,27 +3,25 @@ FROM ubuntu:latest
 MAINTAINER Christoph Meier <meier.c@sfeir.lu>
 
 # Install node.js
-RUN apt-get update
-RUN apt-get install -y python-software-properties python g++ make
-RUN apt-get update
-RUN add-apt-repository ppa:chris-lea/node.js
-RUN apt-get update
-RUN apt-get install -y nodejs
+RUN apt-get update \
+	&& apt-get install -y python-software-properties python g++ make software-properties-common \
+	&& add-apt-repository ppa:chris-lea/node.js \
+	&& apt-get update \
+	&& apt-get install -y nodejs
+
+# Install node dependencies (with cache)
+ADD package.json /tmp/package.json
+RUN cd /tmp && npm install
+RUN mkdir -p /opt/app && cp -a /tmp/node_modules /opt/app/
 
 # Set working directory for execution
-WORKDIR /app/express
-
-# Add app config
-ADD package.json /app/express/package.json
-
-# Install app dependencies (express)
-RUN npm install	
+WORKDIR /opt/app
 
 # Add app files
-ADD app.js /app/express/app.js
+ADD . /opt/app
 
 # Expose port to host
 EXPOSE 8888
 
-# Run app with node
-CMD ["node", "app"]
+# Run app.js with node
+CMD ["node", "app.js"]
